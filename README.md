@@ -1,5 +1,4 @@
 # 狼人杀 
-[GitHub 仓库](https://github.com/Liuhao20081209/werewolf)
 
 ## 一、项目概述
 
