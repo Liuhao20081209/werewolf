@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>狼人杀</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/app.css?v=__VERSION__">
+</head>
+<body>
+<div id="scene" aria-hidden="true">
+    <div class="sky sky-day"></div>
+    <div class="sky sky-night"></div>
+    <div class="stars"></div>
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+    <div class="celestial">
+        <div class="sun"></div>
+        <div class="moon"></div>
+    </div>
+    <svg class="landscape" viewBox="0 258 1440 362" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+            <g id="pine">
+                <path d="M0,-40 L-8,-18 L-4,-18 L-14,-1 L-7,-1 L-19,18 L19,18 L7,-1 L14,-1 L4,-18 L8,-18 Z"/>
+                <rect x="-2.2" y="18" width="4.4" height="9"/>
+            </g>
+        </defs>
+
+        <path class="lp-back" d="M0,470 L100,438 L210,462 L330,412 L440,440 L560,402 L690,438 L820,400 L940,438 L1080,388 L1200,430 L1320,408 L1440,428 L1440,620 L0,620 Z"/>
+
+        <path class="lp-mid" d="M0,530 L80,490 L160,504 L250,470 L340,492 L430,448 L510,480 L590,420 L650,330 L700,392 L760,360 L830,410 L900,450 L980,408 L1060,370 L1120,420 L1200,445 L1300,425 L1380,455 L1440,440 L1440,620 L0,620 Z"/>
+        <path class="lp-mid-light" d="M650,330 L590,420 L510,480 L430,620 L650,620 Z"/>
+        <path class="lp-mid-shadow" d="M650,330 L700,392 L760,360 L830,410 L900,450 L900,620 L650,620 Z"/>
+        <path class="lp-mid-light" d="M1060,370 L980,408 L900,450 L860,620 L1060,620 Z"/>
+        <path class="lp-mid-shadow" d="M1060,370 L1120,420 L1200,445 L1260,620 L1060,620 Z"/>
+        <path class="lp-snowcap" d="M650,330 L592,418 L608,406 L622,421 L638,403 L654,420 L670,404 L684,419 L694,414 L650,330 Z"/>
+        <path class="lp-snowcap" d="M1060,370 L1014,430 L1030,414 L1046,430 L1062,412 L1078,429 L1094,415 L1100,423 L1060,370 Z"/>
+        <path class="lp-snow-shade" d="M650,330 L694,414 L684,419 L670,404 L654,420 L650,418 Z"/>
+        <path class="lp-snow-shade" d="M1060,370 L1100,423 L1094,415 L1078,429 L1062,412 L1060,412 Z"/>
+        <path class="lp-rim lp-rim-mid" d="M0,530 L80,490 L160,504 L250,470 L340,492 L430,448 L510,480 L590,420 L650,330 L700,392 L760,360 L830,410 L900,450 L980,408 L1060,370 L1120,420 L1200,445 L1300,425 L1380,455 L1440,440 L1440,620 L0,620 Z" fill="none"/>
+
+        <path class="lp-near" d="M0,578 L110,548 L240,568 L380,536 L510,562 L650,532 L790,558 L930,534 L1070,564 L1210,540 L1350,562 L1440,548 L1440,620 L0,620 Z"/>
+        <path class="lp-near-light" d="M280,530 L180,562 L90,550 L150,620 L330,620 Z"/>
+        <path class="lp-near-shadow" d="M280,530 L380,555 L470,525 L520,620 L330,620 Z"/>
+        <path class="lp-rim lp-rim-near" d="M0,575 L90,550 L180,562 L280,530 L380,555 L470,525 L560,548 L660,515 L750,545 L850,522 L940,550 L1040,528 L1140,552 L1240,535 L1340,558 L1440,540 L1440,620 L0,620 Z" fill="none"/>
+
+        <path class="lp-ground" d="M0,620 L0,594 L120,586 L260,596 L390,584 L520,592 L660,578 L800,588 L940,576 L1080,586 L1220,578 L1360,588 L1440,582 L1440,620 Z"/>
+
+        <g class="lp-forest-back" fill="currentColor"><use href="#pine" transform="translate(-15,588) scale(0.77)"/> <use href="#pine" transform="translate(32,586) scale(0.80)"/> <use href="#pine" transform="translate(59,587) scale(0.88)"/> <use href="#pine" transform="translate(103,589) scale(0.95)"/> <use href="#pine" transform="translate(155,591) scale(0.74)"/> <use href="#pine" transform="translate(180,593) scale(0.80)"/> <use href="#pine" transform="translate(227,591) scale(0.85)"/> <use href="#pine" transform="translate(257,590) scale(0.85)"/> <use href="#pine" transform="translate(302,593) scale(0.56)"/> <use href="#pine" transform="translate(345,593) scale(0.84)"/> <use href="#pine" transform="translate(389,589) scale(0.92)"/> <use href="#pine" transform="translate(430,593) scale(0.73)"/> <use href="#pine" transform="translate(471,586) scale(0.59)"/> <use href="#pine" transform="translate(497,589) scale(0.94)"/> <use href="#pine" transform="translate(545,590) scale(0.67)"/> <use href="#pine" transform="translate(580,590) scale(0.69)"/> <use href="#pine" transform="translate(623,591) scale(0.91)"/> <use href="#pine" transform="translate(669,594) scale(0.89)"/> <use href="#pine" transform="translate(704,593) scale(0.62)"/> <use href="#pine" transform="translate(749,590) scale(0.91)"/> <use href="#pine" transform="translate(783,592) scale(0.63)"/> <use href="#pine" transform="translate(820,586) scale(0.66)"/> <use href="#pine" transform="translate(865,586) scale(0.95)"/> <use href="#pine" transform="translate(904,586) scale(0.71)"/> <use href="#pine" transform="translate(933,593) scale(0.86)"/> <use href="#pine" transform="translate(967,585) scale(0.80)"/> <use href="#pine" transform="translate(1020,593) scale(0.68)"/> <use href="#pine" transform="translate(1065,594) scale(0.75)"/> <use href="#pine" transform="translate(1091,590) scale(0.58)"/> <use href="#pine" transform="translate(1125,589) scale(0.63)"/> <use href="#pine" transform="translate(1176,585) scale(0.61)"/> <use href="#pine" transform="translate(1221,594) scale(0.68)"/> <use href="#pine" transform="translate(1261,589) scale(0.70)"/> <use href="#pine" transform="translate(1293,590) scale(0.81)"/> <use href="#pine" transform="translate(1333,593) scale(0.80)"/> <use href="#pine" transform="translate(1371,591) scale(0.72)"/> <use href="#pine" transform="translate(1405,594) scale(0.67)"/> <use href="#pine" transform="translate(1450,585) scale(0.77)"/></g>
+        <g class="lp-forest-front" fill="currentColor"><use href="#pine" transform="translate(-16,608) scale(0.93)"/> <use href="#pine" transform="translate(46,605) scale(1.12)"/> <use href="#pine" transform="translate(112,602) scale(1.10)"/> <use href="#pine" transform="translate(186,603) scale(0.88)"/> <use href="#pine" transform="translate(253,603) scale(1.26)"/> <use href="#pine" transform="translate(315,611) scale(1.16)"/> <use href="#pine" transform="translate(389,611) scale(1.05)"/> <use href="#pine" transform="translate(445,605) scale(1.28)"/> <use href="#pine" transform="translate(513,605) scale(0.91)"/> <use href="#pine" transform="translate(593,607) scale(0.94)"/> <use href="#pine" transform="translate(656,607) scale(1.04)"/> <use href="#pine" transform="translate(711,604) scale(0.88)"/> <use href="#pine" transform="translate(790,605) scale(1.06)"/> <use href="#pine" transform="translate(855,605) scale(1.08)"/> <use href="#pine" transform="translate(926,604) scale(1.20)"/> <use href="#pine" transform="translate(988,610) scale(1.11)"/> <use href="#pine" transform="translate(1057,611) scale(0.99)"/> <use href="#pine" transform="translate(1112,609) scale(1.06)"/> <use href="#pine" transform="translate(1179,602) scale(1.09)"/> <use href="#pine" transform="translate(1256,607) scale(1.23)"/> <use href="#pine" transform="translate(1326,608) scale(1.01)"/> <use href="#pine" transform="translate(1387,606) scale(1.14)"/> <use href="#pine" transform="translate(1459,606) scale(1.32)"/></g>
+    </svg>
+</div>
+
+    <div id="scroll-layer">
+    <div id="net-banner"></div>
+    <div class="top-bar">
+        <button class="login-btn" id="admin-btn" type="button" onclick="openAdminPanel()" style="display:none">管理</button>
+        <button class="sound-btn on" id="sound-btn" type="button" onclick="toggleSound()" aria-label="声音"></button>
+        <button class="login-btn" id="top-login-btn" onclick="openAuth()">登录 / 注册</button>
+    </div>
+
+    <div class="intro-container">
+        <div class="intro-title">狼人杀</div>
+        <div class="intro-sub">目前版本支持 4 – 8 人 </div>
+        <div class="intro-text">玩法：狼人隐藏在好人之中，每天夜里可以击杀一名玩家；好人则需要通过白天的发言和投票，找出并放逐所有的狼人</div>
+        <button class="btn intro-cta" onclick="openAuth()">进入游戏</button>
+    </div>
+
+    <div id="game-section">
+        <div class="game-card" id="lobby-view">
+            <div class="lobby-head">
+                <div class="lobby-hi">已登录</div>
+                <div class="lobby-name"><b id="cur-user"></b></div>
+            </div>
+            <div class="lobby-card-title" id="lobby-card-title">创 建 或 加 入 一 场 对 局</div>
+            <button class="btn" onclick="createRoom()">创建新房间</button>
+            <button class="btn btn-ghost" style="margin-top:8px;" onclick="quickJoin()">快速匹配</button>
+            <div style="display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:var(--text-dim); font-size:11px; letter-spacing:2px;">
+                <span class="hr-line"></span>或<span class="hr-line"></span>
+            </div>
+            <input type="number" id="join-id" class="join-id-input" name="room_code"
+                   autocomplete="off" data-lpignore="true" data-1p-ignore
+                   placeholder="输入 6 位房间码">
+            <button class="btn btn-ghost" onclick="joinRoom()">加入房间</button>
+            <div class="rb-block">
+                <div class="rb-head">
+                    <span>在线玩家</span>
+                    <span id="rb-online">0 人</span>
+                </div>
+                <div class="rb-online-list" id="rb-online-list">
+                    <span class="rb-empty">暂无在线玩家</span>
+                </div>
+                <div class="rb-head" style="margin-top:14px;">
+                    <span>当前房间</span>
+                </div>
+                <ul class="rb-list" id="rb-list">
+                    <li class="rb-empty">暂无打开的房间</li>
+                </ul>
+            </div>
+            <div class="lobby-footer">
+                <span class="link" onclick="showRank()">排行榜</span>
+                <span class="link" onclick="showFriends()">好友</span>
+                <span class="link" onclick="showUpdateNotice()">公告</span>
+                <a class="link" href="/download" target="_blank" rel="noopener">下载服务端</a>
+                <span class="link" onclick="openProfile()">账号设置</span>
+                <span class="link" onclick="openQQ()">意见反馈</span>
+                <span class="link danger" onclick="logout()">退出登录</span>
+            </div>
+        </div>
+
+        <div class="game-card" id="room-view" data-tab="main" style="display:none;">
+            <div class="header">
+                <div>
+                    <div class="room-label">房间码</div>
+                    <span class="room-code" id="show-room-id" onclick="copyRoomCode()" title="点击复制房间码"></span>
+                </div>
+                <div class="header-btns">
+                    <button class="leave-btn ds-head-btn" id="ds-btn" style="display:none;" onclick="toggleDeepSeek()" title="DeepSeek 机器人开关">AI：关</button>
+                    <button class="leave-btn" onclick="leaveRoom()">离开房间</button>
+                </div>
+            </div>
+
+            <div class="room-tabs" id="room-tabs">
+                <button class="room-tab on" type="button" data-tab="main" onclick="setRoomTab('main')">对局</button>
+                <button class="room-tab" type="button" data-tab="chat" onclick="setRoomTab('chat')">聊天</button>
+            </div>
+
+            <div class="room-cols">
+                <div class="room-col-main">
+                    <div id="my-role-badge">你的身份：<span id="role-text"></span><span id="wolf-mate-line"></span></div>
+
+                    <div class="host-settings" id="host-settings" style="display:none;">
+                        <span>开局人数</span>
+                        <div class="mp-step">
+                            <button type="button" class="mp-btn" onclick="stepMaxPlayers(-1)">-</button>
+                            <span class="mp-val" id="max-players-val">6 人</span>
+                            <button type="button" class="mp-btn" onclick="stepMaxPlayers(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="room-sub"><span>玩 家</span><span id="pl-count">0 / 0</span></div>
+                    <div class="player-grid" id="player-list"></div>
+
+                    <div id="host-text">等待游戏开始</div>
+                    <div id="phase-line"><div id="phase-bar"><i></i></div><span id="phase-count"></span></div>
+
+                    <div id="action-panel">
+                        <div class="action-row" id="wolf-actions" style="display:none;">
+                            <button class="action-btn" onclick="setAction('kill', this)">杀</button>
+                            <button class="action-btn" onclick="setAction('skip', this)">不杀</button>
+                        </div>
+                        <div class="action-row" id="guard-actions" style="display:none;">
+                            <button class="action-btn" onclick="setAction('guard', this)">守护</button>
+                            <button class="action-btn" onclick="setAction('skip', this)">跳过</button>
+                        </div>
+                        <div class="action-row" id="seer-actions" style="display:none;">
+                            <button class="action-btn" onclick="setAction('check', this)">查验</button>
+                        </div>
+                        <div class="action-row" id="witch-actions" style="display:none;">
+                            <button class="action-btn" id="witch-save-btn" onclick="setAction('save', this)">用解药</button>
+                            <button class="action-btn" id="witch-poison-btn" onclick="setAction('poison', this)">用毒药</button>
+                            <button class="action-btn" onclick="setAction('skip', this)">跳过</button>
+                        </div>
+                        <div class="action-row" id="hunter-actions" style="display:none;">
+                            <button class="action-btn" onclick="setAction('shoot', this)">开枪</button>
+                            <button class="action-btn" onclick="setAction('skip', this)">放弃</button>
+                        </div>
+                        <div class="action-row" id="day-actions" style="display:none; margin-top:5px;">
+                            <button class="action-btn action-blue" onclick="endDiscussion()">结束发言，准备投票</button>
+                        </div>
+                    </div>
+
+                    <div id="action-dock" style="display:none;"></div>
+
+                    <div class="room-cta">
+                        <button class="btn btn-blue" id="ready-btn" style="display:none;" onclick="toggleReady()">准备就绪</button>
+                        <button class="btn" id="start-btn" style="display:none;" onclick="startGame()">开始游戏</button>
+                        <button class="btn btn-quiet" id="nudge-btn" style="display:none; font-size:13px;" onclick="nudgeReady()">催促准备</button>
+                        <button class="btn btn-violet" id="fill-btn" style="display:none;" onclick="fillBots()">填充机器人</button>
+                        <button class="btn btn-quiet" id="end-btn" style="display:none;" onclick="endGame()">强制结束</button>
+                    </div>
+                </div>
+
+                <aside class="room-col-chat">
+                    <div class="chat-head">
+                        <div class="chat-title">聊天</div>
+                    </div>
+                    <div id="voice-tip" class="voice-tip" style="display:none;"></div>
+                    <div class="chat-box" id="chat-box">
+                        <div class="chat-msg"><span class="sys">主持人：</span>欢迎来到房间</div>
+                    </div>
+                    <div id="typing-hint" style="display:none;"></div>
+                    <form class="chat-input-area" autocomplete="off" onsubmit="return false;">
+                        <button class="sound-btn mic-btn" type="button" id="mic-btn" onclick="toggleMic()" aria-label="开麦" title="开麦"></button>
+                        <input type="text" id="chat-input" name="chat_message" placeholder="输入讨论内容"
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                               enterkeyhint="send" data-lpignore="true" data-1p-ignore
+                               onkeypress="if(event.key==='Enter') sendChat()">
+                        <button class="btn" type="button" id="send-btn" onclick="sendChat()">发送</button>
+                    </form>
+                    <div id="voice-audios" style="display:none;"></div>
+                </aside>
+            </div>
+        </div>
+
+        <div class="game-card" id="rank-view" style="display:none;">
+            <h2 class="rank-title">胜率排行榜</h2>
+            <ul class="rank-list" id="rank-list"></ul>
+            <button class="btn btn-ghost" style="margin-top:18px;" onclick="backToLobby()">返回大厅</button>
+        </div>
+
+        <div class="game-card" id="friends-view" style="display:none;">
+            <div class="header">
+                <div>
+                    <div class="room-label">好 友</div>
+                    <span class="room-code" id="fri-count" style="font-size:15px;cursor:default">0 位</span>
+                </div>
+                <button class="leave-btn" onclick="backToLobby()">返回大厅</button>
+            </div>
+            <input type="text" id="fri-search" maxlength="16" autocomplete="off"
+                   placeholder="输入对方的账号名">
+            <button class="btn btn-ghost" onclick="addFriendByName()">发送好友申请</button>
+            <div class="adm-block-title" id="fri-req-title" style="display:none;">好友申请</div>
+            <div id="fri-req-list" style="display:none;"></div>
+            <div class="adm-rooms" id="fri-list" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="game-card" id="admin-view" style="display:none;">
+            <div class="header">
+                <div>
+                    <div class="room-label">管 理</div>
+                    <span class="room-code" id="adm-subtitle" style="font-size:15px;cursor:default">账号与对局</span>
+                </div>
+                <button class="leave-btn" onclick="closeAdminPanel()">返回大厅</button>
+            </div>
+            <div class="adm-tip">你已进入管理页面</div>
+
+            <div class="adm-block-title">账号<span id="adm-count"></span></div>
+            <div class="adm-list" id="adm-list"></div>
+
+            <div class="adm-block-title">批量操作</div>
+            <div class="adm-batch">
+                <button class="btn btn-ghost" onclick="admBatch('reset_all','确定把所有账号的战绩清零？')">清零所有战绩</button>
+                <button class="btn btn-ghost adm-danger" onclick="admBatch('wipe','确定删除所有普通账号？管理员会保留')">删除普通账号</button>
+            </div>
+
+            <div class="adm-block-title">当前对局</div>
+            <div class="adm-rooms" id="adm-rooms"></div>
+
+        </div>
+    </div>
+    </div>
+
+    <div id="profile-modal">
+        <div class="auth-card">
+            <div class="close-btn" onclick="closeProfile()">×</div>
+            <h2>账号设置</h2>
+            <div id="pf-msg" class="msg"></div>
+            <div class="pf-avatar-row">
+                <img id="pf-avatar" class="avatar-md" alt="">
+                <div class="pf-avatar-side">
+                    <label class="pf-avatar-pick">换 头 像<input type="file" accept="image/*" id="pf-avatar-file"></label>
+                    <span class="pf-avatar-hint">选好图会自动裁成方形</span>
+                </div>
+            </div>
+            <input type="text" id="pf-nick" name="nickname" autocomplete="nickname" data-lpignore="true"
+                   placeholder="昵称[对外显示]" maxlength="12">
+            <textarea id="pf-sign" name="signature" maxlength="60" rows="2"
+                      placeholder="个性签名[最多60字，会显示在名片上]"></textarea>
+            <input type="password" id="pf-old" name="current-password" autocomplete="current-password" placeholder="当前密码[必填]">
+            <input type="password" id="pf-new" name="new_password" autocomplete="new-password" placeholder="新密码[不修改就留空]">
+            <button class="btn" onclick="saveProfile()">保存</button>
+            <div class="link" onclick="closeProfile()">取消</div>
+        </div>
+    </div>
+
+    <div id="card-modal">
+        <div class="auth-card card-sheet">
+            <div class="close-btn" onclick="closeCard()">×</div>
+            <div class="card-top">
+                <img id="card-avatar" class="avatar-lg" alt="">
+                <div class="card-top-text">
+                    <div class="card-nick" id="card-nick">—</div>
+                    <div class="card-sub" id="card-sub">—</div>
+                    <div class="card-sign" id="card-sign"></div>
+                </div>
+            </div>
+            <div class="card-stats" id="card-stats">—</div>
+            <div class="card-hist-title">近 10 场战绩</div>
+            <div class="card-history" id="card-history"></div>
+            <div class="card-btns">
+                <button class="btn btn-ghost" id="card-pm-btn" style="display:none" onclick="openPm(cardTarget, document.getElementById('card-nick').innerText)">聊 天</button>
+                <button class="btn btn-ghost" id="card-invite-btn" style="display:none" onclick="cardInvite()">邀请加入</button>
+                <button class="btn" id="card-fri-btn" style="display:none" onclick="cardFriendAction()">加好友</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pm-modal">
+        <div class="card-sheet pm-sheet">
+            <div class="close-btn" onclick="closePm()">×</div>
+            <div class="pm-head">
+                <span id="pm-peer">—</span>
+                <span class="pm-tag">私聊</span>
+            </div>
+            <div class="pm-body" id="pm-body"></div>
+            <div class="pm-input">
+                <input type="text" id="pm-text" maxlength="200" autocomplete="off" placeholder="说点什么">
+                <button class="btn" onclick="sendPm()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ui-dialog">
+        <div class="auth-card">
+            <h3 id="ui-dialog-title">提示</h3>
+            <div class="dlg-text" id="ui-dialog-text"></div>
+            <div class="dlg-btns">
+                <button class="btn plain" type="button" id="ui-dialog-cancel" onclick="uiDialogClose(false)">取消</button>
+                <button class="btn" type="button" id="ui-dialog-ok" onclick="uiDialogClose(true)">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notice-dialog">
+        <div class="notice-card auth-card">
+            <h3 id="notice-title">更新公告</h3>
+            <div id="notice-body"></div>
+            <div class="dlg-btns">
+                <button class="btn" type="button" onclick="closeUpdateNotice()">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal">
+        <div class="auth-card">
+            <div class="close-btn" onclick="closeAuth()">×</div>
+            <h2>登录</h2>
+            <div id="msg-box" class="msg"></div>
+            <div id="login-form">
+                <input type="text" id="l-user" name="username" autocomplete="username" enterkeyhint="next" placeholder="请输入账号">
+                <input type="password" id="l-pwd" name="password" autocomplete="current-password" enterkeyhint="go"
+                       onkeydown="if(event.key==='Enter'){event.preventDefault();login();}" placeholder="请输入密码">
+                <button class="btn" type="button" id="login-submit" onclick="login()">登录</button>
+                <div class="link" onclick="toggleAuth('reg')">没有账号？去注册</div>
+            </div>
+            <div id="reg-form" style="display:none;">
+                <input type="text" id="r-user" name="username" autocomplete="username" placeholder="设置账号">
+                <input type="text" id="r-nick" name="nickname" autocomplete="nickname" data-lpignore="true"
+                       placeholder="设置昵称[对外显示]" maxlength="12">
+                <input type="password" id="r-pwd" name="new_password" autocomplete="new-password" enterkeyhint="go"
+                       onkeydown="if(event.key==='Enter'){event.preventDefault();register();}" placeholder="设置密码">
+                <button class="btn" type="button" id="reg-submit" onclick="register()">注册</button>
+                <div class="link" onclick="toggleAuth('login')">已有账号？去登录</div>
+            </div>
+        </div>
+    </div>
+
+
+<script src="/app.js?v=__VERSION__"></script>
+<div id="mark-menu"></div>
+</body>
+</html>
